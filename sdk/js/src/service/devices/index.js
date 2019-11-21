@@ -309,8 +309,8 @@ class Devices {
     return this._responseTransform(response)
   }
 
-  async deleteById(applicationId, deviceId) {
-    const result = this._deleteDevice(applicationId, deviceId)
+  async deleteById(applicationId, deviceId, components) {
+    const result = this._deleteDevice(applicationId, deviceId, components)
 
     return result
   }
