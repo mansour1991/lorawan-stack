@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fix active application link count being limited to 10 per CPU.
+- Fix an issue causing unexpected behavior surrounding login, logout and token management.
 
 ## [3.2.5] - 2019-11-15
 
