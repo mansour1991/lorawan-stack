@@ -206,6 +206,15 @@ const JoinServerForm = React.memo(props => {
         disabled={state.externalJs}
       />
       <Form.Field
+        title={m.netID}
+        description={m.netIDDescription}
+        name="net_id"
+        type="byte"
+        min={6}
+        max={6}
+        component={Input}
+      />
+      <Form.Field
         title={sharedMessages.appKey}
         name="root_keys.app_key.key"
         type="byte"

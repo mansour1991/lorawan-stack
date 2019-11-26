@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
     then: schema => schema.matches(addressRegexp, sharedMessages.validateAddressFormat),
     otherwise: schema => schema.default(''),
   }),
+  net_id: Yup.string().emptyOrLength(6 * 2, m.validate12), // 6 Byte hex
   root_keys: Yup.object().when(
     ['_external_js', '_lorawan_version'],
     (externalJs, version, schema) => {
