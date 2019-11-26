@@ -86,6 +86,7 @@ import style from './device.styl'
         'locations',
         'formatters',
         'multicast',
+        'net_id',
       ],
       { ignoreNotFound: true },
     ),
