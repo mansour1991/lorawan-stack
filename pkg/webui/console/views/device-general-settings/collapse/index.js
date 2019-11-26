@@ -36,9 +36,9 @@ const Collapse = props => {
     setCollapsed(collapsed => !collapsed)
   }, [])
 
-  const cls = classnames(className, style.section, {
-    [style.disabled]: disabled,
-  })
+  const isOpen = !collapsed && !disabled
+
+  const cls = classnames(className, style.section)
   return (
     <section className={cls}>
       <div className={style.header}>
@@ -52,7 +52,7 @@ const Collapse = props => {
           onClick={onCollapsedChange}
         />
       </div>
-      {!collapsed && <div className={style.content}>{children}</div>}
+      {isOpen && <div className={style.content}>{children}</div>}
     </section>
   )
 }
