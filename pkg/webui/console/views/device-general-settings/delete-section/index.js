@@ -15,16 +15,11 @@
 import React from 'react'
 import { defineMessages } from 'react-intl'
 
-import Message from '../../../../lib/components/message'
 import ModalButton from '../../../../components/button/modal-button'
-import ErrorNotification from '../../../../components/error-notification'
 
 import PropTypes from '../../../../lib/prop-types'
 
-import style from './delete-section.styl'
-
 const m = defineMessages({
-  title: 'Delete this end device',
   deleteDevice: 'Delete End Device',
   deleteWarning:
     'Are you sure you want to delete "{deviceId}"? Deleting an end device cannot be undone!',
@@ -34,24 +29,17 @@ const DeleteSection = props => {
   const { onDelete, onDeleteSuccess, onDeleteFailure, device } = props
   const { name, ids } = device
 
-  const [error, setError] = React.useState('')
-
   const handleDelete = React.useCallback(async () => {
-    setError('')
-
     try {
       await onDelete()
       onDeleteSuccess()
     } catch (err) {
-      setError(err)
       onDeleteFailure()
     }
   }, [onDelete, onDeleteFailure, onDeleteSuccess])
 
   return (
     <div>
-      {error && <ErrorNotification content={error} small />}
-      <Message className={style.title} component="h4" content={m.title} />
       <ModalButton
         type="button"
         icon="delete"
@@ -61,7 +49,6 @@ const DeleteSection = props => {
         }}
         onApprove={handleDelete}
         danger
-        naked
       />
     </div>
   )

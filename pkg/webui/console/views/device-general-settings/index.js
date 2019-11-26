@@ -130,6 +130,20 @@ export default class DeviceGeneralSettings extends React.Component {
     })
   }
 
+  @bind
+  async handleDeleteFailure() {
+    const { device } = this.props
+    const {
+      ids: { device_id: deviceId },
+    } = device
+
+    toast({
+      title: deviceId,
+      message: m.deleteFailure,
+      type: toast.types.ERROR,
+    })
+  }
+
   render() {
     const { device, isConfig, asConfig, jsConfig, nsConfig } = this.props
 
@@ -204,6 +218,7 @@ export default class DeviceGeneralSettings extends React.Component {
                 device={device}
                 onDelete={this.handleDelete}
                 onDeleteSuccess={this.handleDeleteSuccess}
+                onDeleteFailure={this.handleDeleteFailure}
               />
             </Collapse>
           </Col>
