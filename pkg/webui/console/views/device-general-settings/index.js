@@ -186,14 +186,14 @@ export default class DeviceGeneralSettings extends React.Component {
             <Collapse title={m.isTitle} description={isDescription} disabled={isDisabled}>
               <IdentityServerForm device={device} onSubmit={this.handleSubmit} />
             </Collapse>
+            <Collapse title={m.nsTitle} description={nsDescription} disabled={nsDisabled}>
+              <NetworkServerForm device={device} onSubmit={this.handleSubmit} />
+            </Collapse>
             <Collapse title={m.asTitle} description={asDescription} disabled={asDisabled}>
               <ApplicationServerForm device={device} onSubmit={this.handleSubmit} />
             </Collapse>
             <Collapse title={m.jsTitle} description={jsDescription} disabled={jsDisabled}>
               <JoinServerForm device={device} onSubmit={this.handleSubmit} jsConfig={jsConfig} />
-            </Collapse>
-            <Collapse title={m.nsTitle} description={nsDescription} disabled={nsDisabled}>
-              <NetworkServerForm device={device} onSubmit={this.handleSubmit} />
             </Collapse>
             <Collapse
               title={m.consoleTitle}
