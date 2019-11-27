@@ -197,7 +197,12 @@ export default class DeviceGeneralSettings extends React.Component {
         <IntlHelmet title={sharedMessages.generalSettings} />
         <Row>
           <Col lg={8} md={12}>
-            <Collapse title={m.isTitle} description={isDescription} disabled={isDisabled}>
+            <Collapse
+              title={m.isTitle}
+              description={isDescription}
+              disabled={isDisabled}
+              initialCollapsed={false}
+            >
               <IdentityServerForm device={device} onSubmit={this.handleSubmit} />
             </Collapse>
             <Collapse title={m.nsTitle} description={nsDescription} disabled={nsDisabled}>
@@ -209,11 +214,7 @@ export default class DeviceGeneralSettings extends React.Component {
             <Collapse title={m.jsTitle} description={jsDescription} disabled={jsDisabled}>
               <JoinServerForm device={device} onSubmit={this.handleSubmit} jsConfig={jsConfig} />
             </Collapse>
-            <Collapse
-              title={m.consoleTitle}
-              description={m.consoleDescription}
-              initialCollapsed={false}
-            >
+            <Collapse title={m.consoleTitle} description={m.consoleDescription}>
               <DeleteSection
                 device={device}
                 onDelete={this.handleDelete}
