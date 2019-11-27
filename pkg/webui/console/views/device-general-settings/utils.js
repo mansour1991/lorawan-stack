@@ -83,7 +83,7 @@ export const hasExternalJs = device => {
     Boolean(device) &&
     (!Boolean(device.root_keys) || !Boolean(Object.keys(device.root_keys).length))
 
-  // If Join Server is not availbe then `root_keys` wont be in the device payload.
+  // If Join Server is not available then `root_keys` wont be in the device payload.
   return jsEnabled && noRootKeys
 }
 
