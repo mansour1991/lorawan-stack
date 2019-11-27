@@ -83,8 +83,9 @@ const JoinServerForm = React.memo(props => {
         app_key: {},
       },
       resets_join_nonces,
-      join_server_address,
+      join_server_address = '',
       lorawan_version,
+      net_id = '',
     } = device
 
     return {
@@ -93,6 +94,7 @@ const JoinServerForm = React.memo(props => {
       root_keys,
       _external_js: hasExternalJs(device),
       _lorawan_version: lorawan_version,
+      net_id: externalJs ? undefined : net_id,
     }
   }, [device])
 
@@ -121,13 +123,14 @@ const JoinServerForm = React.memo(props => {
             app_key: {},
           },
           resets_join_nonces: false,
-          join_server_address: undefined,
+          join_server_address: '',
           _external_js: externalJsChecked,
+          net_id: undefined,
         })
       } else {
-        let { join_server_address } = initialValues
-        const { resets_join_nonces, root_keys } = initialValues
-        if (!Boolean(join_server_address)) {
+        let { join_server_address = '' } = initialValues
+        const { resets_join_nonces, root_keys, net_id = '' } = initialValues
+        if (typeof join_server_address === undefined) {
           // always fallback to the default js address when resetting from
           // the 'provisioned by external js' option.
           join_server_address = new URL(jsConfig.base_url).hostname
@@ -139,6 +142,7 @@ const JoinServerForm = React.memo(props => {
           root_keys,
           _external_js: externalJsChecked,
           resets_join_nonces,
+          net_id,
         })
       }
     },
@@ -210,9 +214,10 @@ const JoinServerForm = React.memo(props => {
         description={m.netIDDescription}
         name="net_id"
         type="byte"
-        min={6}
-        max={6}
+        min={3}
+        max={3}
         component={Input}
+        disabled={state.externalJs}
       />
       <Form.Field
         title={sharedMessages.appKey}

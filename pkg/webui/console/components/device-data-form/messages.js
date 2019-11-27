@@ -53,8 +53,8 @@ export default defineMessages({
   supportsClassC: 'Supports Class C',
   updateSuccess: 'Successfully updated end device',
   unexposed: 'Unexposed',
-  validate12: 'This value needs to be exactly 12 characters long',
   validate16: 'This value needs to be exactly 16 characters long',
   validate32: 'This value needs to be exactly 32 characters long',
+  validate6: 'This value needs to be exactly 6 characters long',
   validate8: 'This value needs to be exactly 8 characters long',
 })
