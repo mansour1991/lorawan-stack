@@ -109,7 +109,7 @@ export default class ByteInput extends React.Component {
 
   render() {
     const {
-      value,
+      rawValue,
       className,
       min,
       max,
@@ -120,6 +120,8 @@ export default class ByteInput extends React.Component {
       showPerChar,
       ...rest
     } = this.props
+
+    const value = rawValue === null ? '' : value
 
     return [
       <Placeholder
