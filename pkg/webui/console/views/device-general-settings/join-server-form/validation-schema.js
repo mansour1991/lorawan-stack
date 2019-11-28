@@ -19,28 +19,39 @@ import sharedMessages from '../../../../lib/shared-messages'
 import { address as addressRegexp } from '../../../lib/regexp'
 import m from '../../../components/device-data-form/messages'
 
+import { selectJsConfig } from '../../../../lib/selectors/env'
+
 import { parseLorawanMacVersion } from '../utils'
 
+const jsConfig = selectJsConfig()
+
 const random16BytesString = () => randomByteString(32)
-const toUndefined = value => (!Boolean(value) ? undefined : value)
 
 const validationSchema = Yup.object().shape({
-  join_server_address: Yup.string().when('_external_js', {
+  join_server_address: Yup.string().when('$externalJs', {
     is: false,
-    then: schema => schema.matches(addressRegexp, sharedMessages.validateAddressFormat),
-    otherwise: schema => schema.default(''),
+    then: schema =>
+      schema
+        .matches(addressRegexp, sharedMessages.validateAddressFormat)
+        .default(new URL(jsConfig.base_url).hostname),
+    otherwise: schema => schema.strip(),
   }),
-  net_id: Yup.nullableString().emptyOrLength(3 * 2, m.validate6), // 3 Byte hex
+  net_id: Yup.string().when('$externalJs', {
+    is: true,
+    then: Yup.string().strip(),
+    otherwise: Yup.nullableString()
+      .emptyOrLength(3 * 2, m.validate6)
+      .default(''), // 3 Byte hex
+  }),
   root_keys: Yup.object().when(
-    ['_external_js', '_lorawan_version'],
+    ['$externalJs', '$lorawanVersion'],
     (externalJs, version, schema) => {
       const strippedSchema = Yup.object().strip()
       const keySchema = Yup.lazy(() => {
         return !externalJs
           ? Yup.object().shape({
               key: Yup.string()
-                .emptyOrLength(16 * 2, m.validate32) // 16 Byte hex
-                .transform(toUndefined)
+                .length(16 * 2, m.validate32) // 16 Byte hex
                 .default(random16BytesString),
             })
           : Yup.object().strip()
@@ -66,14 +77,21 @@ const validationSchema = Yup.object().shape({
       })
     },
   ),
-  resets_join_nonces: Yup.boolean().when('_lorawan_version', {
+  resets_join_nonces: Yup.boolean().when('$lorawanVersion', {
     // Verify if lorawan version is 1.1.0 or higher.
     is: version => parseLorawanMacVersion(version) >= 110,
-    then: schema => schema,
+    then: schema => schema.default(false),
     otherwise: schema => schema.strip(),
   }),
-  _external_js: Yup.boolean(),
-  _lorawan_version: Yup.string(),
+  _external_js: Yup.boolean().when('$externalJs', {
+    is: true,
+    then: Yup.boolean()
+      .default(true)
+      .transform(() => true),
+    otherwise: Yup.boolean()
+      .default(false)
+      .transform(() => false),
+  }),
 })
 
 export default validationSchema
