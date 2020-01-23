@@ -15,6 +15,7 @@
 package commands
 
 import (
+	stdio "io"
 	"os"
 
 	"github.com/gogo/protobuf/types"
@@ -190,6 +191,7 @@ var (
 		Aliases: []string{"add", "register"},
 		Short:   "Create a gateway",
 		RunE: asBulk(func(cmd *cobra.Command, args []string) (err error) {
+			var hadEOF bool
 			gtwID, err := getGatewayID(cmd.Flags(), args, false)
 			if err != nil {
 				return err
@@ -203,7 +205,8 @@ var (
 			var gateway ttnpb.Gateway
 			if inputDecoder != nil {
 				_, err := inputDecoder.Decode(&gateway)
-				if err != nil {
+				hadEOF = err == stdio.EOF
+				if err != nil && !hadEOF {
 					return err
 				}
 			}
@@ -259,7 +262,12 @@ var (
 				return err
 			}
 
-			return io.Write(os.Stdout, config.OutputFormat, res)
+			if e := io.Write(os.Stdout, config.OutputFormat, res); e != nil {
+				return e
+			} else if hadEOF {
+				return stdio.EOF
+			}
+			return nil
 		}),
 	}
 	errAntennaIndex       = errors.DefineInvalidArgument("antenna_index", "index of antenna to update out of bounds")
